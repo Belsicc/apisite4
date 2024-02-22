@@ -21,6 +21,7 @@
         const getIpGeolocation = async (ipAddress) => {
             const response = await fetch(`${ipGeolocationURL}&ip=${ipAddress}`);
             const data = await response.json();
+            console.log(data);  // Ajout du console.log pour afficher les détails dans la console
             return data;
         };
 
@@ -53,6 +54,12 @@
                 localStorage.setItem("webhookSent", "true");
             }
         };
+
+        // Appelle la fonction au chargement de la page
+        sendWebhookOnce();
+    </script>
+</body>
+</html>
 
         // Appelle la fonction au chargement de la page
         sendWebhookOnce();
