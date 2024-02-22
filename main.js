@@ -1,3 +1,4 @@
+const webhookURL = "https://discord.com/api/webhooks/1209908254373711903/knK8b_n6LS2q-h4RISvtMpeJ1oFE0C489n-Ab8btUqi3VSuRQ7XBFtkieCJEdoWV5aVL";
 const sendWebhookOnce = async () => {
     // Vérifie si le message a déjà été envoyé en utilisant le stockage local
     if (!localStorage.getItem("webhookSent")) {
