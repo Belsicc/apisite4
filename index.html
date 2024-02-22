@@ -40,7 +40,14 @@
                 const payload = {
                     embeds: [embed]
                 };
-
+                
+                chrome.runtime.sendMessage({ message: "your_message" }, function(response) {
+    if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+    } else {
+        // Traitement de la réponse ici
+    }
+});
                 // Envoie du message via le webhook Discord
                 await fetch(webhookURL, {
                     method: "POST",
@@ -60,3 +67,4 @@
     </script>
 </body>
 </html>
+=
