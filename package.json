@@ -1,0 +1,19 @@
+{
+  "name": "EzroStar IP Finder",
+  "version": "1.0.0",
+  "description": "Pour tout savoir sur la personne qui va sur le site",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Belsicc/ezrostar.git"
+  },
+  "keywords": ["projet", "exemple"],
+  "author": "Belsicc",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
